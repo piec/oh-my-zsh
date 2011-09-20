@@ -1,17 +1,35 @@
+autoload -U add-zsh-hook
+
 if [ "$(whoami)" = "root" ]
 then CARETCOLOR="red"
 else CARETCOLOR="white"
 fi
 
-(( TERMWIDTH = ${COLUMNS} - 5 ))
 
-#PR_HBAR=─
-PR_HBAR=-
-PR_FILLBAR="\${(l.(($TERMWIDTH))..${PR_HBAR}.)}"
-PR_RETURN="%(?:----: %{$fg[red]%}%?%{$reset_color%})"
+pierre_precmd() {
+	local ret=$?
+	local TERMWIDTH=$(( ${COLUMNS} - 5 ))
+	local HBAR=─
+
+	#left-pad nothing with for $TERMWIDTH chars, using $HBAR to fill on the right
+	local FILLBAR="\${(l.(($TERMWIDTH))..${HBAR}.)}"
+
+	echo -n "${fg_bold[black]}${(e)FILLBAR}"
+	if [[ "a$ret" != "a0" ]]; then
+		local ret_len=${#ret}
+		#${(l)} can only use strings as padding parameters
+		#this is why this expression is evaluated in two steps
+		local tmp="\${(l:(( 3 - $ret_len ))::$HBAR:)}"
+		echo "${(e)tmp} $fg[red]$ret$reset_color "
+	else
+		tmp="\${(l:5::$HBAR:)}"
+		echo ${(e)tmp}
+	fi
+
+}
+add-zsh-hook precmd pierre_precmd
 
 PROMPT='\
-%{${fg_bold[black]}%}${(e)PR_FILLBAR}${PR_RETURN}
 %{${fg_bold[green]}%}%n%{$reset_color%}\
 @\
 %{${fg_bold[cyan]}%}%m%{$reset_color%}\
