@@ -31,11 +31,19 @@ add-zsh-hook precmd pierre_precmd
 
 PROMPT='\
 %{${fg_bold[green]}%}%n%{$reset_color%}\
-@\
+ \
 %{${fg_bold[cyan]}%}%m%{$reset_color%}\
-:%{$reset_color%}\
-%{${fg_bold[blue]}%}%3~$(git_prompt_info)\
-%{${fg_bold[$CARETCOLOR]}%}%#%{${reset_color}%} '
+ %{$reset_color%}\
+%{${fg_bold[blue]}%}%3~\
+%{${fg_bold[$CARETCOLOR]}%} %#%{${reset_color}%} '
+
+#PROMPT='\
+#%{${fg_bold[green]}%}%n%{$reset_color%}\
+#@\
+#%{${fg_bold[cyan]}%}%m%{$reset_color%}\
+#:%{$reset_color%}\
+#%{${fg_bold[blue]}%}%3~\
+#%{${fg_bold[$CARETCOLOR]}%}%#%{${reset_color}%} '
 
 #RPS1='$(vi_mode_prompt_info)'
 
